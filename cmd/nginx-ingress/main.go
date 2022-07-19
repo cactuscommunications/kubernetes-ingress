@@ -117,7 +117,7 @@ func main() {
 		DynClient:                    dynClient,
 		RestConfig:                   config,
 		ResyncPeriod:                 30 * time.Second,
-		Namespace:                    *watchNamespace,
+		Namespace:                    watchNamespace,
 		NginxConfigurator:            cnf,
 		DefaultServerSecret:          *defaultServerSecret,
 		AppProtectEnabled:            *appProtect,
