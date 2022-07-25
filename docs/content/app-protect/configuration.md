@@ -1,29 +1,34 @@
 ---
 title: Configuration
 
-description: "This document describes how to configure the NGINX App Protect module"
+description: "This document describes how to configure the NGINX App Protect WAF module"
 weight: 1900
 doctypes: [""]
 toc: true
 docs: "DOCS-578"
 ---
 
-This document describes how to configure the NGINX App Protect module
-> Check out the complete NGINX Ingress Controller with App Protect example resources on GitHub [for VirtualServer resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/custom-resources/appprotect-waf) and [for Ingress resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/ingress-resources/appprotect).
+This document describes how to configure the NGINX App Protect WAF module
+> Check out the complete NGINX Ingress Controller with App Protect WAF example resources on GitHub [for VirtualServer resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/custom-resources/appprotect-waf) and [for Ingress resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/ingress-resources/appprotect).
 
 ## Global Configuration
 
-The NGINX Ingress Controller has a set of global configuration parameters that align with those available in the NGINX App Protect module. See [ConfigMap keys](/nginx-ingress-controller/configuration/global-configuration/configmap-resource/#modules) for the complete list. The App Protect parameters use the `app-protect*` prefix.
+The NGINX Ingress Controller has a set of global configuration parameters that align with those available in the NGINX App Protect WAF module. See [ConfigMap keys](/nginx-ingress-controller/configuration/global-configuration/configmap-resource/#modules) for the complete list. The App Protect WAF parameters use the `app-protect*` prefix.
 
-> Check out the complete NGINX Ingress Controller with App Protect example resources on GitHub [for VirtualServer resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/custom-resources/appprotect-waf) and [for Ingress resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/ingress-resources/appprotect).
+> Check out the complete NGINX Ingress Controller with App Protect WAF example resources on GitHub [for VirtualServer resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/custom-resources/appprotect-waf) and [for Ingress resources](https://github.com/nginxinc/kubernetes-ingress/tree/v2.3.0/examples/ingress-resources/appprotect).
 
-## Enable App Protect for an Ingress Resource
+## Enable App Protect WAF for an Ingress Resource
 
-You can enable and configure NGINX App Protect on a per-Ingress-resource basis. To do so, you can apply the [App Protect annotations](/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations/#app-protect) to each desired resource.
+You can enable and configure NGINX App Protect WAF on a per-Ingress-resource basis. To do so, you can apply the [App Protect WAF annotations](/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations/#app-protect) to each desired resource.
 
-## App Protect Policies
+## Enable App Protect WAF for a Virtual Server Resource
 
-You can define App Protect policies for your Ingress resources by creating an `APPolicy` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
+You can enable and configure NGINX App Protect WAF on a per-VirtualServer-resource basis. To do so, you can create a [Policy custom resource with references to the Appprotect WAF resources](/nginx-ingress-controller/configuration/policy-resource/#waf) and add these Policy references to each VirtualServer resource you want to protect.
+
+
+## App Protect WAF Policies
+
+You can define App Protect WAF policies for your Ingress or Virtual Server resources by creating an `APPolicy` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
 
  > **Note**: The fields `policy.signature-requirements[].minRevisionDatetime` and `policy.signature-requirements[].maxRevisionDatetime` are not currently supported.
 
@@ -32,7 +37,7 @@ You can define App Protect policies for your Ingress resources by creating an `A
 
  > **Note**: [External References](/nginx-app-protect/configuration-guide/configuration/#external-references) in the Ingress Controller are deprecated and will not be supported in future releases.
 
-To add any [App Protect policy](/nginx-app-protect/declarative-policy/policy/) to an Ingress resource:
+To add any [App Protect WAF policy](/nginx-app-protect/declarative-policy/policy/) to an Ingress resource:
 
 1. Create an `APPolicy` Custom resource manifest.
 2. Add the desired policy to the `spec` field in the `APPolicy` resource.
@@ -97,20 +102,20 @@ To add any [App Protect policy](/nginx-app-protect/declarative-policy/policy/) t
         enforcementUrls: []
   ```
 
-  > Notice how the fields match exactly in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect policy config.
+  > Notice how the fields match exactly in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect WAF policy config.
 
-## App Protect Logs
+## App Protect WAF Logs
 
-You can set the [App Protect log configurations](/nginx-app-protect/troubleshooting/#app-protect-logging-overview) by creating an `APLogConf` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
+You can set the [App Protect WAF log configurations](/nginx-app-protect/troubleshooting/#app-protect-logging-overview) by creating an `APLogConf` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
 
-To add the [App Protect log configurations](/nginx-app-protect/configuration/#security-logs) to an Ingress resource:
+To add the [App Protect WAF log configurations](/nginx-app-protect/configuration/#security-logs) to an Ingress resource:
 
 1. Create an `APLogConf` Custom Resource manifest.
 2. Add the desired log configuration to the `spec` field in the `APLogConf` resource.
 
-   > **Note**: The fields from the JSON must be presented in the YAML *exactly* the same, in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect log config.
+   > **Note**: The fields from the JSON must be presented in the YAML *exactly* the same, in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect WAF log config.
 
-For example, say you want to [log state changing requests](/nginx-app-protect/configuration/#security-log-configuration-file) for your Ingress resources using App Protect. The App Protect log configuration looks like this:
+For example, say you want to [log state changing requests](/nginx-app-protect/configuration/#security-log-configuration-file) for your Ingress resources using App Protect WAF. The App Protect WAF log configuration looks like this:
 
 ```json
 {
@@ -140,20 +145,20 @@ spec:
     max_request_size: any
     max_message_size: 5k
 ```
-## App Protect User Defined Signatures
+## App Protect WAF User Defined Signatures
 
-You can define App Protect [User Defined Signatures](https://docs.nginx.com/nginx-app-protect/configuration/#user-defined-signature-definitions) for your Ingress resources by creating an `APUserSig` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
+You can define App Protect WAF [User Defined Signatures](https://docs.nginx.com/nginx-app-protect/configuration/#user-defined-signature-definitions) for your VirtualServer or Ingress resources by creating an `APUserSig` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
 
  > **Note**: The field `revisionDatetime` is not currently supported.
 
 > **Note**: `APUserSig` resources increase the reload time of NGINX Plus compared with `APPolicy` and `APLogConf` resources. Refer to [NGINX Fails to Start or Reload](/nginx-ingress-controller/app-protect/troubleshooting/#nginx-fails-to-start-or-reload) for more information.
 
-To add the [User Defined Signatures](https://docs.nginx.com/nginx-app-protect/configuration/#user-defined-signature-definitions) to an Ingress resource:
+To add the [User Defined Signatures](https://docs.nginx.com/nginx-app-protect/configuration/#user-defined-signature-definitions) to a VirtualServer or Ingress resource:
 
 1. Create an `APUserSig` Custom resource manifest.
 2. Add the desired User defined signature to the `spec` field in the `APUserSig` resource.
 
-   > **Note**: The fields from the JSON must be presented in the YAML *exactly* the same, in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect User Defined signature. There is no need to reference the user defined signature resource in the ingress resource.
+   > **Note**: The fields from the JSON must be presented in the YAML *exactly* the same, in name and level. The Ingress Controller will transform the YAML into a valid JSON App Protect WAF User Defined signature. There is no need to reference the user defined signature resource in the Policy or Ingress resources.
 
 For example, say you want to create the following user defined signature:
 
