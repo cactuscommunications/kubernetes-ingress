@@ -40,9 +40,9 @@ spec:
           requests:
             cpu: "100m"
             memory: "128Mi"
-         #limits:
-         #  cpu: "1"
-         #  memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
         securityContext:
           allowPrivilegeEscalation: true
           runAsUser: 101 #nginx
@@ -64,7 +64,6 @@ spec:
         args:
           - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
-         #- -include-year
          #- -enable-cert-manager
          #- -enable-external-dns
          #- -v=3 # Enables extensive logging. Useful for troubleshooting.

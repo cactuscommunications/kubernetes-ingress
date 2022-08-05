@@ -6,12 +6,12 @@ ARG DEBIAN_VERSION=bullseye-slim
 
 
 ############################################# Base images containing libs for Opentracing #############################################
-FROM opentracing/nginx-opentracing:nginx-1.23.1 as opentracing-lib
-FROM opentracing/nginx-opentracing:nginx-1.23.1-alpine as alpine-opentracing-lib
+FROM opentracing/nginx-opentracing:nginx-1.23.0 as opentracing-lib
+FROM opentracing/nginx-opentracing:nginx-1.23.0-alpine as alpine-opentracing-lib
 
 
 ############################################# Base image for Debian #############################################
-FROM nginx:1.23.1 AS debian
+FROM nginx:1.23.0 AS debian
 
 RUN --mount=type=bind,from=opentracing-lib,target=/tmp/ot/ \
 	apt-get update \
@@ -27,7 +27,7 @@ RUN --mount=type=bind,from=opentracing-lib,target=/tmp/ot/ \
 
 ############################################# Base image for Alpine #############################################
 # docker.io/library/nginx is a temporary workaround for Dependabot to see this as different from the one used in Debian
-FROM docker.io/library/nginx:1.23.1-alpine AS alpine
+FROM docker.io/library/nginx:1.23.0-alpine AS alpine
 
 RUN --mount=type=bind,from=alpine-opentracing-lib,target=/tmp/ot/ \
 	apk add --no-cache libcap libstdc++ \
@@ -244,7 +244,7 @@ LABEL org.nginx.kic.image.build.nginx.version="${NGINX_PLUS_VERSION}${NGINX_VERS
 
 
 ############################################# Build nginx-ingress in golang container #############################################
-FROM golang:1.19-alpine AS builder
+FROM golang:1.18-alpine AS builder
 ARG IC_VERSION
 ARG TARGETARCH
 

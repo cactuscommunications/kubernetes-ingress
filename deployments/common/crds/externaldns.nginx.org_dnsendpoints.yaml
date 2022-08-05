@@ -29,13 +29,11 @@ spec:
             metadata:
               type: object
             spec:
-              description: DNSEndpointSpec holds information about endpoints.
               type: object
               properties:
                 endpoints:
                   type: array
                   items:
-                    description: Endpoint describes DNS Endpoint.
                     type: object
                     properties:
                       dnsName:
@@ -50,7 +48,6 @@ spec:
                         description: ProviderSpecific stores provider specific config
                         type: array
                         items:
-                          description: ProviderSpecificProperty represents provider specific config property.
                           type: object
                           properties:
                             name:
@@ -72,7 +69,6 @@ spec:
                         items:
                           type: string
             status:
-              description: DNSEndpointStatus represents generation observed by the external dns controller.
               type: object
               properties:
                 observedGeneration:

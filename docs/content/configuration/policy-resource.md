@@ -438,7 +438,7 @@ You can apply policies to both VirtualServer and VirtualServerRoute resources. F
       tls:
         secret: cafe-secret
       policies: # spec policies
-      - name: policy1
+      - policy1
       upstreams:
       - name: coffee
         service: coffee-svc
