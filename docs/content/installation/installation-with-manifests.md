@@ -10,8 +10,6 @@ docs: "DOCS-603"
 ---
 
 
-This document describes how to install the NGINX Ingress Controller in your Kubernetes cluster using Kubernetes manifests.
-
 ## Prerequisites
 
 1. Make sure you have access to the Ingress Controller image:
@@ -21,7 +19,7 @@ This document describes how to install the NGINX Ingress Controller in your Kube
     * It is also possible to build your own image and push it to your private Docker registry by following the instructions from [here](/nginx-ingress-controller/installation/building-ingress-controller-image).
 2. Clone the Ingress Controller repo and change into the deployments folder:
     ```
-    $ git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.3.0
+    $ git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.4.0
     $ cd kubernetes-ingress/deployments
     ```
 
@@ -92,7 +90,7 @@ If you would like to use the TCP and UDP load balancing features of the Ingress 
 
 ### Resources for NGINX App Protect
 
-If you would like to use the App Protect module, create the following additional resources:
+If you would like to use the App Protect WAF module, create the following additional resources:
 
 1. Create a custom resource definition for `APPolicy`, `APLogConf` and `APUserSig`:
 

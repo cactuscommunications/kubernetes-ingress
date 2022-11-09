@@ -74,6 +74,7 @@ func TestValidateHost(t *testing.T) {
 		"hello",
 		"example.com",
 		"hello-world-1",
+		"*.example.com",
 	}
 
 	for _, h := range validHosts {
@@ -89,6 +90,7 @@ func TestValidateHost(t *testing.T) {
 		"..",
 		".example.com",
 		"-hello-world-1",
+		"*.-example.com",
 	}
 
 	for _, h := range invalidHosts {
@@ -1463,6 +1465,10 @@ func TestValidateRegexPath(t *testing.T) {
 			regexPath: `~ ^/f\"oo.*\\.jpg`,
 			msg:       "regexp with escaped double quotes",
 		},
+		{
+			regexPath: "~ [0-9a-z]{4}[0-9]+",
+			msg:       "regexp with curly braces",
+		},
 	}
 
 	for _, test := range tests {
@@ -1524,6 +1530,8 @@ func TestValidateRoutePath(t *testing.T) {
 	invalidPaths := []string{
 		"",
 		"invalid",
+		// regex without preceding "~*" modifier
+		"^/foo.*\\.jpg",
 	}
 
 	for _, path := range invalidPaths {

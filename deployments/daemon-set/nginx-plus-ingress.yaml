@@ -17,8 +17,9 @@ spec:
        #prometheus.io/scheme: http
     spec:
       serviceAccountName: nginx-ingress
+      automountServiceAccountToken: true
       containers:
-      - image: nginx-plus-ingress:2.3.0
+      - image: nginx-plus-ingress:2.4.0
         imagePullPolicy: IfNotPresent
         name: nginx-plus-ingress
         ports:
@@ -65,6 +66,7 @@ spec:
           - -nginx-plus
           - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+         #- -include-year
          #- -enable-app-protect
          #- -enable-app-protect-dos
          #- -v=3 # Enables extensive logging. Useful for troubleshooting.

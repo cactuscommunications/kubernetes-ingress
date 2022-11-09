@@ -47,6 +47,8 @@ func main() {
 
 	validateIngressClass(kubeClient)
 
+	checkNamespaceExists(kubeClient)
+
 	dynClient, confClient := createCustomClients(config)
 
 	constLabels := map[string]string{"class": *ingressClass}
@@ -73,6 +75,7 @@ func main() {
 	cfgParams = processConfigMaps(kubeClient, cfgParams, nginxManager, templateExecutor)
 
 	staticCfgParams := &configs.StaticConfigParams{
+		DisableIPV6:                    *disableIPV6,
 		HealthStatus:                   *healthStatus,
 		HealthStatusURI:                *healthStatusURI,
 		NginxStatus:                    *nginxStatus,
@@ -117,7 +120,7 @@ func main() {
 		DynClient:                    dynClient,
 		RestConfig:                   config,
 		ResyncPeriod:                 30 * time.Second,
-		Namespace:                    *watchNamespace,
+		Namespace:                    watchNamespaces,
 		NginxConfigurator:            cnf,
 		DefaultServerSecret:          *defaultServerSecret,
 		AppProtectEnabled:            *appProtect,
@@ -147,6 +150,7 @@ func main() {
 		SnippetsEnabled:              *enableSnippets,
 		CertManagerEnabled:           *enableCertManager,
 		ExternalDNSEnabled:           *enableExternalDNS,
+		IsIPV6Disabled:               *disableIPV6,
 	}
 
 	lbc := k8s.NewLoadBalancerController(lbcInput)
@@ -227,6 +231,17 @@ func validateIngressClass(kubeClient kubernetes.Interface) {
 
 	if ingressClassRes.Spec.Controller != k8s.IngressControllerName {
 		glog.Fatalf("IngressClass with name %v has an invalid Spec.Controller %v; expected %v", ingressClassRes.Name, ingressClassRes.Spec.Controller, k8s.IngressControllerName)
+	}
+}
+
+func checkNamespaceExists(kubeClient kubernetes.Interface) {
+	for _, ns := range watchNamespaces {
+		if ns != "" {
+			_, err := kubeClient.CoreV1().Namespaces().Get(context.TODO(), ns, meta_v1.GetOptions{})
+			if err != nil {
+				glog.Warningf("Error when getting Namespace %v: %v", ns, err)
+			}
+		}
 	}
 }
 
@@ -655,7 +670,7 @@ func processConfigMaps(kubeClient *kubernetes.Clientset, cfgParams *configs.Conf
 		if err != nil {
 			glog.Fatalf("Error when getting %v: %v", *nginxConfigMaps, err)
 		}
-		cfgParams = configs.ParseConfigMap(cfm, *nginxPlus, *appProtect, *appProtectDos)
+		cfgParams = configs.ParseConfigMap(cfm, *nginxPlus, *appProtect, *appProtectDos, *enableTLSPassthrough)
 		if cfgParams.MainServerSSLDHParamFileContent != nil {
 			fileName, err := nginxManager.CreateDHParam(*cfgParams.MainServerSSLDHParamFileContent)
 			if err != nil {

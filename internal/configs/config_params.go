@@ -57,6 +57,7 @@ type ConfigParams struct {
 	AppProtectDosResource                  string
 	MainAppProtectDosLogFormat             []string
 	MainAppProtectDosLogFormatEscaping     string
+	MainAppProtectDosArbFqdn               string
 	ProxyBuffering                         bool
 	ProxyBuffers                           string
 	ProxyBufferSize                        string
@@ -110,6 +111,7 @@ type ConfigParams struct {
 
 // StaticConfigParams holds immutable NGINX configuration parameters that affect the main NGINX config.
 type StaticConfigParams struct {
+	DisableIPV6                    bool
 	HealthStatus                   bool
 	HealthStatusURI                string
 	NginxStatus                    bool

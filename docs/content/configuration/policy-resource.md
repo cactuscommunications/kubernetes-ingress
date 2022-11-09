@@ -13,7 +13,7 @@ The Policy resource allows you to configure features like access control and rat
 
 The resource is implemented as a [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/).
 
-This document is the reference documentation for the Policy resource. An example of a Policy for access control is available in our [GitHub repo](https://github.com/nginxinc/kubernetes-ingress/blob/v2.3.0/examples/custom-resources/access-control).
+This document is the reference documentation for the Policy resource. An example of a Policy for access control is available in our [GitHub repo](https://github.com/nginxinc/kubernetes-ingress/blob/v2.4.0/examples/custom-resources/access-control).
 
 ## Prerequisites
 
@@ -329,7 +329,7 @@ NGINX Plus will pass the ID of an authenticated user to the backend in the HTTP 
 #### Prerequisites
 
 In order to use OIDC, you need to enable [zone synchronization](https://docs.nginx.com/nginx/admin-guide/high-availability/zone_sync/). If you don't set up zone synchronization, NGINX Plus will fail to reload.
-You also need to configure a resolver, which NGINX Plus will use to resolve the IDP authorization endpoint. You can find an example configuration [in our GitHub repo](https://github.com/nginxinc/kubernetes-ingress/blob/v2.3.0/examples/custom-resources/oidc#step-7---configure-nginx-plus-zone-synchronization-and-resolver).
+You also need to configure a resolver, which NGINX Plus will use to resolve the IDP authorization endpoint. You can find an example configuration [in our GitHub repo](https://github.com/nginxinc/kubernetes-ingress/blob/v2.4.0/examples/custom-resources/oidc#step-7---configure-nginx-plus-zone-synchronization-and-resolver).
 
 > **Note**: The configuration in the example doesn't enable TLS and the synchronization between the replica happens in clear text. This could lead to the exposure of tokens.
 
@@ -385,7 +385,7 @@ For `kubectl get` and similar commands, you can also use the short name `pol` in
 
 > Note: This feature is only available in NGINX Plus with AppProtect.
 
-The WAF policy configures NGINX Plus to secure client requests using App Protect policies.
+The WAF policy configures NGINX Plus to secure client requests using App Protect WAF policies.
 
 For example, the following policy will enable the referenced APPolicy. You can configure multiple APLogConfs with log destinations:
 ```yaml
@@ -401,15 +401,15 @@ waf:
     logDest: "syslog:server=syslog-svc-secondary.default:514"
 ```
 > Note: The field `waf.securityLog` is deprecated and will be removed in future releases.It will be ignored if `waf.securityLogs` is populated.
-> Note: The feature is implemented using the NGINX Plus [NGINX App Protect Module](https://docs.nginx.com/nginx-app-protect/configuration/).
+> Note: The feature is implemented using the NGINX Plus [NGINX App Protect WAF Module](https://docs.nginx.com/nginx-app-protect/configuration/).
 
 {{% table %}}
 |Field | Description | Type | Required |
 | ---| ---| ---| --- |
-|``enable`` | Enables NGINX App Protect. | ``bool`` | Yes |
-|``apPolicy`` | The [App Protect policy](/nginx-ingress-controller/app-protect/configuration/#app-protect-policies) of the WAF. Accepts an optional namespace. | ``string`` | No |
+|``enable`` | Enables NGINX App Protect WAF. | ``bool`` | Yes |
+|``apPolicy`` | The [App Protect WAF policy](/nginx-ingress-controller/app-protect/configuration/#app-protect-policies) of the WAF. Accepts an optional namespace. | ``string`` | No |
 |``securityLog.enable`` | Enables security log. | ``bool`` | No |
-|``securityLog.apLogConf`` | The [App Protect log conf](/nginx-ingress-controller/app-protect/configuration/#app-protect-logs) resource. Accepts an optional namespace. | ``string`` | No |
+|``securityLog.apLogConf`` | The [App Protect WAF log conf](/nginx-ingress-controller/app-protect/configuration/#app-protect-logs) resource. Accepts an optional namespace. | ``string`` | No |
 |``securityLog.logDest`` | The log destination for the security log. Accepted variables are ``syslog:server=<ip-address &#124; localhost; fqdn>:<port>``, ``stderr``, ``<absolute path to file>``. Default is ``"syslog:server=127.0.0.1:514"``. | ``string`` | No |
 {{% /table %}}
 
@@ -438,7 +438,7 @@ You can apply policies to both VirtualServer and VirtualServerRoute resources. F
       tls:
         secret: cafe-secret
       policies: # spec policies
-      - policy1
+      - name: policy1
       upstreams:
       - name: coffee
         service: coffee-svc
