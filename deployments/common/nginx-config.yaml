@@ -7,3 +7,4 @@ data:
   # proxy-protocol: "True"
   real-ip-header: "X-Forwarded-For"
   set-real-ip-from: "0.0.0.0/0"
+  server-tokens: "False"
