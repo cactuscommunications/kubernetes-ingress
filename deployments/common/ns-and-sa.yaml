@@ -8,3 +8,8 @@ kind: ServiceAccount
 metadata:
   name: nginx-ingress 
   namespace: nginx-ingress
+  annotations:
+    meta.helm.sh/release-name: base-edit
+    meta.helm.sh/release-namespace: default
+  labels:
+    app.kubernetes.io/managed-by: Helm
