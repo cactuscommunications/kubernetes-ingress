@@ -8,3 +8,5 @@ data:
   real-ip-header: "X-Forwarded-For"
   set-real-ip-from: "0.0.0.0/0"
   server-tokens: "False"
+  log-format-escaping: "json"
+  log-format:  '{"remote_address": "$remote_addr","host": "$host","http_protocol": "$server_protocol","remote_user": "$remote_user","local_time": "$time_local","request_method": "$request_method","request": "$request","status": "$status","grpc_status": "$grpc_status","body_bytes_sent": "$body_bytes_sent","http_referer": "$http_referer","http_user_agent": "$http_user_agent","http_x_forwarded_for": "$http_x_forwarded_for","resource_namespace": "$resource_namespace","service": "$service","request_time": "$request_time","upstream_address": "$upstream_addr","upstream_response_time": "$upstream_response_time","request_length": "$request_length"}'
