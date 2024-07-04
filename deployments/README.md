@@ -24,11 +24,7 @@
 6. Install CRDs
 
     ```
-    kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml && \
-    kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml && \
-    kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml && \
-    kubectl apply -f common/crds/k8s.nginx.org_policies.yaml && \
-    kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
+    kubectl apply -f common/crds/crds.yaml
     ```
     
 7. Create deployment
